@@ -3,6 +3,9 @@ package com.sab.textquest;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
+import android.media.AudioAttributes;
+import android.media.MediaCodecInfo;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +22,11 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
     private Button b_west;
     private Button b_quit;
 
+    private int soundSteps;
+
     private TextView locationDescription;
+
+    SoundPool soundPool;
 
     Location currentLocation;
     Map<Integer, Location> locations;
@@ -30,6 +37,13 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+
+        AudioAttributes audioAttributes = new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                .build();
+        soundPool = new SoundPool.Builder().setMaxStreams(2).setAudioAttributes(audioAttributes)
+                .build();
+        soundSteps = soundPool.load(this, R.raw.footsteps, 1);
 
         b_north = findViewById(R.id.b_north);
         b_south = findViewById(R.id.b_south);
@@ -78,6 +92,7 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void choosePath(String direction){
+        soundPool.play(soundSteps, 1, 1, 0, 0, 1);
         currentLocation = locations.get(currentLocation.getPathToChoose().get(direction));
         locationDescription.setText(currentLocation.getLocationDescription());
         setPaths(currentLocation.getPathToChoose());
@@ -99,6 +114,13 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
             button.setBackgroundResource(R.color.colorGoodToGo);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(soundPool != null)
+        soundPool.release();
     }
+}
 
 

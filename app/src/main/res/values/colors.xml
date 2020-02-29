@@ -4,5 +4,8 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#FF5722</color>
     <color name="colorGoodToGo">#29B130</color>
-    <color name="colorNoPath">#597459</color>
+    <color name="colorNoPath">#BCE4BF</color>
+    <color name="colorStart">#00E240</color>
+    <color name="colorCenter">#00BCD4</color>
+    <color name="colorEnd">#0032A0</color>
 </resources>
